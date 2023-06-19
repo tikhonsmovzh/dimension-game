@@ -34,15 +34,12 @@ public class PlayerController : MonoBehaviour
         transform.localRotation = Quaternion.Euler(0, _Rotate.x, 0);
         _myCamera.transform.localRotation = Quaternion.Euler(_Rotate.y, 0, 0);
 
-        _body.MovePosition(_body.position + DegreeToVector3(Input.GetAxis("Vertical") * _speed * Time.deltaTime, _Rotate.x - 90) +
-                                            DegreeToVector3(Input.GetAxis("Horizontal") * _speed * Time.deltaTime, _Rotate.x));
-
         if (Input.GetButton("Jump"))
         {
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out RaycastHit hit, Mathf.Infinity))
             {
-                if(hit.distance <= 1.1)
-                    _body.AddForce(Vector3.up * _jumpForce);
+                if(hit.distance <= 1.1f)
+                    _body.AddForce(transform.up * _jumpForce, ForceMode.Impulse);
             }
         }
 
@@ -80,7 +77,11 @@ public class PlayerController : MonoBehaviour
                 _heldObject = null;
             }
         }
+    }
 
+    private void FixedUpdate()
+    {
+        _body.AddForce(transform.forward * Input.GetAxisRaw("Vertical") * _speed + transform.right * Input.GetAxisRaw("Horizontal") * _speed, ForceMode.Force);
     }
 
     private Vector3 DegreeToVector3(float force, float degree)

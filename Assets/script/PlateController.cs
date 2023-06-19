@@ -34,7 +34,7 @@ public class PlateController : MonoBehaviour
 
     public void DePress()
     {
-        _countPress--;//RaumkonsoleClickAnim
+        _countPress--;
 
         if (_countPress == 0)
         {
